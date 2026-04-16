@@ -159,12 +159,12 @@ extern "x86-interrupt" fn keyboard_interrupt_handler( _stack_frame: InterruptSta
                             
                             let mut len = LEN.lock();
 
+                            println!();
+                            if *text != [b' '; MAX_LEN] {
+                                crate::shell::execute(args);
+                            }
                             *text = [b' '; MAX_LEN];
                             *len = 0;
-
-                            println!();
-                            
-                            crate::shell::execute(args);
                             println!();
                         
                             print!("{}", PROMPT);
