@@ -24,9 +24,11 @@ pub fn execute(input: [u8; MAX_LEN + 1]) {
         match first_arg{
             "\n" => println!(),
             "ping" => println!("\npong"),
-            "cowsays" => commands::cowsays(command_args),
+            "cowsay" => commands::cowsay(command_args),
             "clear" => for i in 1..100 {println!()},
             "whoami" => commands::whoami(),
+            "help" => commands::help(),
+            "aboutme" => commands::aboutme(),
             _ => println!("Unknown command"),
         }
     }
