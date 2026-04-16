@@ -7,7 +7,6 @@ This project is my first major step into systems programming and operating syste
 * **CPU Exception Handling:** Implementing the Interrupt Descriptor Table (IDT) to handle hardware and software exceptions.
 * **Double Faults & Stack Management:** Proper handling of kernel panics and stack overflows.
 * **Paging & Memory Management:** Direct mapping of physical memory and implementing a heap allocator.
-* **Basic Multitasking:** Understanding cooperative and preemptive multitasking principles.
 * **Custom Shell & Command Line:** Developed a standalone shell environment from scratch.
     * Features a command buffer and basic string parsing.
     * Supports multiple built-in commands (type `help` to see the full list).
