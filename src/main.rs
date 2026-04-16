@@ -77,10 +77,9 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     // let b = Box::new(41);
 
     
-    print!(" Hello, root.");
-    println!();
-    println!("{}", PROMPT);
-    println!();
+    print!(" Hello, root.\n");
+    // print!("{}", PROMPT);
+    println!("[Enter] to continue");
     #[cfg(test)]
     test_kernel_main();
     os::hlt_loop();
