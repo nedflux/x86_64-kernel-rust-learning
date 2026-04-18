@@ -73,8 +73,9 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
     allocator::init_heap(&mut mapper, &mut frame_allocator)
         .expect("heap initialization failed");
 
-    // use alloc::boxed::Box;
-    // let b = Box::new(41);
+    use alloc::boxed::Box;
+    let b = Box::new(41);
+
 
     
     print!(" Hello, root.\n");

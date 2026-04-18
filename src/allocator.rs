@@ -1,4 +1,8 @@
 use alloc::alloc::{GlobalAlloc, Layout};
+pub mod bump;
+pub mod linked_list;
+use bump::BumpAllocator;
+use linked_list::LinkedListAllocator;
 
 use x86_64::{
     structures::paging::{
@@ -10,10 +14,29 @@ use x86_64::{
 use core::ptr::null_mut;
 
 #[global_allocator]
-static ALLOCATOR: Dummy = Dummy;
+static ALLOCATOR: Locked<LinkedListAllocator> = Locked::new(LinkedListAllocator::new());
 
 pub const HEAP_START: usize = 0x_4444_4444_0000;
 pub const HEAP_SIZE: usize = 100 * 1024;
+
+struct Locked<A> {
+    inner: spin::Mutex<A>,
+}
+impl<A> Locked<A>{
+    pub const fn new(inner: A) -> Self {
+        Locked{
+            inner: spin::Mutex::new(inner),
+        }
+    }
+
+    pub fn lock(&self) -> spin::MutexGuard<A>{
+        self.inner.lock()
+    }
+}
+
+pub fn align_up(addr: usize, align: usize) -> usize {
+    (addr + align - 1) & !(align - 1)
+}
 
 pub struct Dummy;
 
@@ -37,6 +60,7 @@ pub fn init_heap(
         let heap_start_page = Page::containing_address(heap_start);
         let heap_end_page = Page::containing_address(heap_end);
         Page::range_inclusive(heap_start_page, heap_end_page)
+        
     };
 
     for page in page_range {
@@ -49,6 +73,9 @@ pub fn init_heap(
             mapper.map_to(page, frame, flags, frame_allocator,)?.flush()
         };
         
+    }
+    unsafe {
+        ALLOCATOR.lock().init(HEAP_START, HEAP_SIZE);
     }
     Ok(())
 }
